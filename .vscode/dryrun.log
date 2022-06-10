@@ -1,0 +1,6 @@
+make.exe --dry-run --always-make --keep-going --print-directory
+make.exe: Entering directory 'b:/Items/oscilloscope/stm32f103_oled'
+make.exe: Leaving directory 'b:/Items/oscilloscope/stm32f103_oled'
+ 
+make.exe: *** No targets specified and no makefile found.  Stop.
+

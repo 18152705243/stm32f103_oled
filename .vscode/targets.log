@@ -8,7 +8,7 @@ make.exe: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Fri Jun 10 17:58:53 2022
+# Make data base, printed on Sun Jun 19 15:10:02 2022
 
 # Variables
 
@@ -69,7 +69,7 @@ PROGRAMW6432 = C:\Program Files
 # environment
 PROGRAMDATA = C:\ProgramData
 # environment
-VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-2aaab4f3-7380-4e1f-bbdd-5878c537cc4a-sock
+VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-a50becc9-1fe1-4456-8598-3a6a48db07ef-sock
 # environment
 VSCODE_CWD = B:\VSCode\Microsoft VS Code
 # environment
@@ -109,7 +109,7 @@ INTELLIJ IDEA = B:\Idea\IntelliJ IDEA 2021.1\bin;
 # automatic
 *F = $(notdir $*)
 # environment
-CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_7648_SATLOZJOECRDCZXM
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_13660_IHPGFCAWPMJLMJYX
 # environment
 SW_SIM_MPIT = INTELMPI
 # environment
@@ -131,7 +131,7 @@ PUBLIC = C:\Users\Public
 # environment
 VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
 # environment
-VSCODE_CODE_CACHE_PATH = C:\Users\ronyz\AppData\Roaming\Code\CachedData\c3511e6c69bb39013c4a4b7b9566ec1ca73fc4d5
+VSCODE_CODE_CACHE_PATH = C:\Users\ronyz\AppData\Roaming\Code\CachedData\30d9c6cd9483b2cc586687151bcbcd635f373630
 # environment
 APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
 # environment
@@ -175,7 +175,7 @@ PROCESSOR_IDENTIFIER = Intel64 Family 6 Model 158 Stepping 9, GenuineIntel
 # environment
 OS = Windows_NT
 # environment
-VSCODE_IPC_HOOK = \\.\pipe\09bfdd846b4e4c77d0a243d448d575ba-1.67.2-main-sock
+VSCODE_IPC_HOOK = \\.\pipe\09bfdd846b4e4c77d0a243d448d575ba-1.68.1-main-sock
 # environment
 HOMEPATH = \Users\ronyz
 # environment
@@ -233,7 +233,7 @@ PROCESSOR_LEVEL = 6
 # environment
 FPS_BROWSER_APP_PROFILE_STRING = Internet Explorer
 # environment
-VSCODE_PID = 7648
+VSCODE_PID = 13660
 # environment
 DOTNET_CLI_TELEMETRY_OPTOUT = 1
 # environment
@@ -247,9 +247,9 @@ USERDOMAIN_ROAMINGPROFILE = RONYZ
 
 # Directories
 
-# . (key b:/Items/oscilloscope/stm32f103_oled, mtime 1654691716): 16 files, no impossibilities.
+# . (key b:/Items/oscilloscope/stm32f103_oled, mtime 1654861833): 17 files, no impossibilities.
 
-# 16 files, no impossibilities in 1 directories.
+# 17 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -306,12 +306,12 @@ GNUmakefile:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 23 / storage = 211 B / avg = 9 B
-# current buf: size = 8162 B / used = 211 B / count = 23 / avg = 9 B
+# strcache buffers: 1 (0) / strings = 24 / storage = 216 B / avg = 9 B
+# current buf: size = 8162 B / used = 216 B / count = 24 / avg = 9 B
 
-# strcache performance: lookups = 25 / hit rate = 8%
+# strcache performance: lookups = 26 / hit rate = 7%
 # hash-table stats:
-# Load=23/8192=0%, Rehash=0, Collisions=1/25=4%
-# Finished Make data base on Fri Jun 10 17:58:53 2022
+# Load=24/8192=0%, Rehash=0, Collisions=1/26=4%
+# Finished Make data base on Sun Jun 19 15:10:02 2022
 
  

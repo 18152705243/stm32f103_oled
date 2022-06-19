@@ -1,7 +1,7 @@
 #include "bsp_adc.h"
 
-#define ADC1_DR_Address    ((u32)0x4001244C)		//ADC1的地址
 
+uint8_t adc_dma_changed_sta = 0;
 extern uint16_t adc_buf[1024];
 		   
 //初始化ADC
@@ -88,12 +88,12 @@ void ADC_DMA_Init()
     DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)&ADC1->DR;                 // ADC1地址
     DMA_InitStructure.DMA_MemoryBaseAddr = (uint32_t)adc_buf;       //内存地址
     DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralSRC;                          //方向(从外设到内存)
-    DMA_InitStructure.DMA_BufferSize = 100;                                    //传输内容的大小
+    DMA_InitStructure.DMA_BufferSize = 500;                                    //传输内容的大小
     DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;            //外设地址固定
     DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;                    //内存地址递增
     DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord; //外设数据单位
     DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_HalfWord;         //内存数据单位
-    DMA_InitStructure.DMA_Mode = DMA_Mode_Circular;                             // DMA模式：循环传输
+    DMA_InitStructure.DMA_Mode = DMA_Mode_Normal;                             // DMA模式：循环传输
     DMA_InitStructure.DMA_Priority = DMA_Priority_High;                         //优先级：高
     DMA_InitStructure.DMA_M2M = DMA_M2M_Disable;                                //禁止内存到内存的传输
     DMA_Init(DMA1_Channel1, &DMA_InitStructure);                                //配置DMA1
@@ -153,3 +153,32 @@ void ADC_SetTimerFre(uint16_t psc, uint16_t arr)
     TIM3->ARR = arr;
 }
 
+void ADC_DMAStartTransmit(void)
+{
+	DMA1_Channel1->CCR&=~(1<<0);  //关闭DMA传输
+	DMA1_Channel1->CNDTR=500;  //DMA1,传输数据量
+	DMA1_Channel1->CCR|=1<<0;  //开启DMA传输
+}
+
+void ADC_DMAStopTransmit(void)
+{
+	DMA1_Channel1->CCR&=~(1<<0);  //关闭DMA传输
+}
+
+uint8_t ADC_GetTransmitedSta()
+{
+    if (adc_dma_changed_sta)
+        return 1;
+    else
+        return 0;
+}
+
+void ADC_SetTransmitedSta()
+{
+    adc_dma_changed_sta = 1;
+}
+
+void ADC_ResetTransmitedSta()
+{
+    adc_dma_changed_sta = 0;
+}

@@ -1,9 +1,0 @@
-..\output\lv_printf.o: ..\lvgl\src\lv_misc\lv_printf.c
-..\output\lv_printf.o: ..\lvgl\src\lv_misc\lv_printf.h
-..\output\lv_printf.o: ..\lvgl\src\lv_misc\../../../lv_conf.h
-..\output\lv_printf.o: B:\KEIL_MDK\ARM\ARMCC\Bin\..\include\stdint.h
-..\output\lv_printf.o: ..\lvgl\src\lv_misc\../../../lvgl/src/lv_conf_checker.h
-..\output\lv_printf.o: B:\KEIL_MDK\ARM\ARMCC\Bin\..\include\stdarg.h
-..\output\lv_printf.o: B:\KEIL_MDK\ARM\ARMCC\Bin\..\include\stddef.h
-..\output\lv_printf.o: B:\KEIL_MDK\ARM\ARMCC\Bin\..\include\stdbool.h
-..\output\lv_printf.o: B:\KEIL_MDK\ARM\ARMCC\Bin\..\include\float.h

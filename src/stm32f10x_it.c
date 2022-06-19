@@ -26,6 +26,7 @@
 #include "bsp.h"
 
 extern uint16_t adc_buf[1024];
+extern uint8_t adc_dma_changed_sta;
 
 #if USART1_IRQ_ALLOW != 0
 uint8_t uart1_recive_ch;
@@ -53,14 +54,10 @@ void USART2_IRQHandler(void)                	//串口1中断服务程序
 
 void DMA1_Channel1_IRQHandler(void)
 {
-    static uint16_t i = 0;
     if (DMA_GetFlagStatus(DMA1_IT_TC1) != RESET)
     {
-		if (i++ >= 1000)
-		{
-			printf("haha");
-			i = 0;
-		}
+		
+		ADC_SetTransmitedSta();
         DMA_ClearITPendingBit(DMA1_IT_TC1);
     }
 }

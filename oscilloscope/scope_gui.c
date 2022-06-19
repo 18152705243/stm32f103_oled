@@ -75,6 +75,70 @@ void Scope_Refresh(void)
 }
 
 
+void Scope_DrawPic(scope_uint16_t x, scope_uint16_t y, scope_uint16_t sizex, scope_uint16_t sizey, const char *bmp)
+{
+    u16 j = 0;
+    u8 i, n, temp, m;
+    u8 x0 = x, y0 = y;
+    sizey = sizey / 8 + ((sizey % 8) ? 1 : 0);
+    for (n = 0; n < sizey; n++)
+    {
+        for (i = 0; i < sizex; i++)
+        {
+            temp = bmp[j];
+            j++;
+            for (m = 0; m < 8; m++)
+            {
+                if (temp & 0x01)
+                    Scope_DrawPoint(x, y, SCOPE_COLOR_WHITE);
+                else
+                    Scope_ClearPoint(x, y, SCOPE_COLOR_BLACK);
+                temp >>= 1;
+                y++;
+            }
+            x++;
+            if ((x - x0) == sizex)
+            {
+                x = x0;
+                y0 = y0 + 8;
+            }
+            y = y0;
+        }
+    }
+}
+
+void Scope_DrawPicReverse(scope_uint16_t x, scope_uint16_t y, scope_uint16_t sizex, scope_uint16_t sizey, const char *bmp)
+{
+    u16 j = 0;
+    u8 i, n, temp, m;
+    u8 x0 = x, y0 = y;
+    sizey = sizey / 8 + ((sizey % 8) ? 1 : 0);
+    for (n = 0; n < sizey; n++)
+    {
+        for (i = 0; i < sizex; i++)
+        {
+            temp = bmp[j];
+            j++;
+            for (m = 0; m < 8; m++)
+            {
+                if (temp & 0x01)
+                    Scope_ClearPoint(x, y, SCOPE_COLOR_WHITE);
+                else
+                    Scope_DrawPoint(x, y, SCOPE_COLOR_BLACK);
+                temp >>= 1;
+                y++;
+            }
+            x++;
+            if ((x - x0) == sizex)
+            {
+                x = x0;
+                y0 = y0 + 8;
+            }
+            y = y0;
+        }
+    }
+}
+
 
 //void Scope_WaveRefreshPoint(scope_uint16_t adc_value)
 //{
@@ -93,3 +157,20 @@ void Scope_Refresh(void)
 ////        Scope_DrawPoint(SCOPE_START_X + 10 + i, SCOPE_END_Y - 10 - y0, SCOPE_COLOR_WHITE);
 //    }
 //}
+
+
+const unsigned char bmp_edge_down[] = {
+    0x00,0x02,0x0a,0x7e,0x50,0x40,0x00
+};
+
+const unsigned char bmp_edge_rising[] = {
+    0x00,0x40,0x50,0x7e,0x0a,0x02,0x00
+};
+
+const unsigned char bmp_voltage_base[] = {
+    0x7e,0x3c,0x18
+};
+
+const unsigned char bmp_trig_base[] = {
+    0x18,0x3c,0x7e
+};

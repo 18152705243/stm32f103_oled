@@ -1,8 +1,6 @@
 #include "scope_gui.h"
 #include "oled.h"
 
-
-
 void Scope_DrawPoint(scope_uint16_t coord_x, scope_uint16_t coord_y, scope_color_t fill_color)
 {
     OLED_DrawPoint(coord_x, coord_y, 1);
@@ -13,26 +11,24 @@ void Scope_ClearPoint(scope_uint16_t coord_x, scope_uint16_t coord_y, scope_colo
     OLED_DrawPoint(coord_x, coord_y, 0);
 }
 
-void Scope_DrawLine(scope_uint16_t x0, scope_uint16_t y0, 
+void Scope_DrawLine(scope_uint16_t x0, scope_uint16_t y0,
                     scope_uint16_t x1, scope_uint16_t y1,
                     scope_color_t fill_color)
 {
     OLED_DrawLine(x0, y0, x1, y1, 1);
-
 }
 
-
-void Scope_DrawRect(scope_uint16_t x0, scope_uint16_t y0, 
+void Scope_DrawRect(scope_uint16_t x0, scope_uint16_t y0,
                     scope_uint16_t x1, scope_uint16_t y1,
                     scope_color_t fill_color)
 {
     OLED_DrawLine(x0, y0, x1, y0, 1);
-	OLED_DrawLine(x0, y1, x1, y1, 1);
-	OLED_DrawLine(x0, y0, x0, y1, 1);
-	OLED_DrawLine(x1, y0, x1, y1, 1);
+    OLED_DrawLine(x0, y1, x1, y1, 1);
+    OLED_DrawLine(x0, y0, x0, y1, 1);
+    OLED_DrawLine(x1, y0, x1, y1, 1);
 }
 
-void Scope_Fill(scope_uint16_t x0, scope_uint16_t y0, 
+void Scope_Fill(scope_uint16_t x0, scope_uint16_t y0,
                 scope_uint16_t x1, scope_uint16_t y1,
                 scope_color_t fill_color)
 {
@@ -71,9 +67,8 @@ void Scope_ShowStrReverse(scope_uint16_t x, scope_uint16_t y, char *buf, scope_u
 
 void Scope_Refresh(void)
 {
-	OLED_Refresh();
+    OLED_Refresh();
 }
-
 
 void Scope_DrawPic(scope_uint16_t x, scope_uint16_t y, scope_uint16_t sizex, scope_uint16_t sizey, const char *bmp)
 {
@@ -140,37 +135,17 @@ void Scope_DrawPicReverse(scope_uint16_t x, scope_uint16_t y, scope_uint16_t siz
 }
 
 
-//void Scope_WaveRefreshPoint(scope_uint16_t adc_value)
-//{
-//    scope_uint16_t i, y0, y1;
-//    for (i = 0; i < SCOPE_WAVE_POINT_NUM; i++)
-//    {
-//        y0 = (adc_value/4096.0)*80;
-//		y1 = (adc_buf[i+1]/4096.0)*80;
-//		Scope_DrawLine(SCOPE_START_X + 10 + i, SCOPE_START_Y + 1, 
-//						SCOPE_START_X + 10 + i, SCOPE_END_Y - 10 + 1, 
-//						SCOPE_COLOR_BLACK);
-//		
-//		Scope_DrawLine(SCOPE_START_X + 10 + i, SCOPE_END_Y - 10 - y0, 
-//						SCOPE_START_X + 10 + i + 1, SCOPE_END_Y - 10 - y1, 
-//						SCOPE_COLOR_WHITE);
-////        Scope_DrawPoint(SCOPE_START_X + 10 + i, SCOPE_END_Y - 10 - y0, SCOPE_COLOR_WHITE);
-//    }
-//}
-
-
 const unsigned char bmp_edge_down[] = {
-    0x00,0x02,0x0a,0x7e,0x50,0x40,0x00
-};
+    0x00, 0x02, 0x0a, 0x7e, 0x50, 0x40, 0x00};
 
 const unsigned char bmp_edge_rising[] = {
-    0x00,0x40,0x50,0x7e,0x0a,0x02,0x00
-};
+    0x00, 0x40, 0x50, 0x7e, 0x0a, 0x02, 0x00};
 
 const unsigned char bmp_voltage_base[] = {
-    0x7e,0x3c,0x18
-};
+    0x7e, 0x3c, 0x18};
 
 const unsigned char bmp_trig_base[] = {
-    0x18,0x3c,0x7e
-};
+    0x18, 0x3c, 0x7e};
+
+const unsigned char bmp_fill[] = {
+    0x00};

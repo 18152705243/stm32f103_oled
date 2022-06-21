@@ -16,12 +16,16 @@ typedef enum{
 #define KEY_LEFT()	(!PAin(6))
 #define KEY_RIGHT()	(!PAin(7))
 #define KEY_MID()	(!PBin(0))
+#define KEY_SET()	(!PBin(1))
+#define KEY_RESET()	(!PBin(10))
 
 #define KEY_UP_PRESS	1
 #define KEY_DOWN_PRESS	2
 #define KEY_LEFT_PRESS	3
 #define KEY_RIGHT_PRESS	4
-#define KEY_MID_PRESS	4
+#define KEY_MID_PRESS	5
+#define KEY_SET_PRESS   6
+#define KEY_RESET_PRESS 7
 
 
 void LED_Init(void);

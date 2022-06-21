@@ -124,15 +124,4 @@ void TIM3_Init(u16 arr,u16 psc)
    	TIM_Cmd(TIM3, DISABLE); 	//使能定时器
 }
 
-uint16_t second_count = 0;
-uint16_t ms_count = 0;
-//定时器5中断服务程序	 
-void TIM2_IRQHandler(void)
-{
-	if (ms_count++ >= 1000) {
-		second_count++;
-		ms_count = 0;
-	}
-    TIM_ClearITPendingBit(TIM2, TIM_IT_Update); //清除中断标志位
- 
-}
+

@@ -7,6 +7,7 @@ extern const unsigned char bmp_edge_down[];
 extern const unsigned char bmp_edge_rising[];
 extern const unsigned char bmp_voltage_base[];
 extern const unsigned char bmp_trig_base[];
+extern const unsigned char bmp_fill[];
 
 void Scope_Fill(scope_uint16_t x0, scope_uint16_t y0, 
                 scope_uint16_t x1, scope_uint16_t y1,

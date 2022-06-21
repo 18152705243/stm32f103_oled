@@ -217,7 +217,7 @@ void OLED_DrawLine(u8 x1, u8 y1, u8 x2, u8 y2, u8 mode)
     else
     {
         incy = -1;
-        delta_y = -delta_x;
+        delta_y = -delta_y;
     }
     if (delta_x > delta_y)
         distance = delta_x; //选取基本增量坐标轴

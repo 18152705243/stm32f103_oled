@@ -8,7 +8,7 @@ make.exe: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Sun Jun 19 15:10:02 2022
+# Make data base, printed on Tue Jun 21 14:55:23 2022
 
 # Variables
 
@@ -69,7 +69,7 @@ PROGRAMW6432 = C:\Program Files
 # environment
 PROGRAMDATA = C:\ProgramData
 # environment
-VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-a50becc9-1fe1-4456-8598-3a6a48db07ef-sock
+VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-4f82e7fb-02d8-4cf3-a304-b59464521329-sock
 # environment
 VSCODE_CWD = B:\VSCode\Microsoft VS Code
 # environment
@@ -109,7 +109,7 @@ INTELLIJ IDEA = B:\Idea\IntelliJ IDEA 2021.1\bin;
 # automatic
 *F = $(notdir $*)
 # environment
-CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_13660_IHPGFCAWPMJLMJYX
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_14684_YGUGOEHHDQBNBUPG
 # environment
 SW_SIM_MPIT = INTELMPI
 # environment
@@ -233,7 +233,7 @@ PROCESSOR_LEVEL = 6
 # environment
 FPS_BROWSER_APP_PROFILE_STRING = Internet Explorer
 # environment
-VSCODE_PID = 13660
+VSCODE_PID = 14684
 # environment
 DOTNET_CLI_TELEMETRY_OPTOUT = 1
 # environment
@@ -247,7 +247,7 @@ USERDOMAIN_ROAMINGPROFILE = RONYZ
 
 # Directories
 
-# . (key b:/Items/oscilloscope/stm32f103_oled, mtime 1654861833): 17 files, no impossibilities.
+# . (key b:/Items/oscilloscope/stm32f103_oled, mtime 1655624382): 17 files, no impossibilities.
 
 # 17 files, no impossibilities in 1 directories.
 
@@ -312,6 +312,6 @@ GNUmakefile:
 # strcache performance: lookups = 26 / hit rate = 7%
 # hash-table stats:
 # Load=24/8192=0%, Rehash=0, Collisions=1/26=4%
-# Finished Make data base on Sun Jun 19 15:10:02 2022
+# Finished Make data base on Tue Jun 21 14:55:23 2022
 
  

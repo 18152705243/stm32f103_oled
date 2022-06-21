@@ -7,10 +7,11 @@
 #define SCOPE_HEIGHT    64
 
 #define SCOPE_WAVE_POINT_NUM    100
-#define SCOPE_WAVE_POINT_BUF_NUM    500
+#define SCOPE_WAVE_POINT_BUF_NUM    4000
 #define SCOPE_WAVE_POINTS_PER_TIMEBASE  (SCOPE_WAVE_POINT_NUM/5)
 #define SCOPE_WAVE_VMAX     (3.3f)  /* maxium voltage */
 #define SCOPE_WAVE_VALUE_MAX    (4095)  /* maxium value */
+
 
 #define SCOPE_START_X	(0)
 #define SCOPE_END_X		(SCOPE_WAVE_POINT_NUM)
@@ -34,6 +35,10 @@ typedef char scope_sta_t;
 #define SCOPE_FONT_SIZE 8
 #define SCOPE_FONT_HOR  6
 #define SCOPE_FONT_VER  8
+
+
+#define SCOPE_EVENT_INPUT       (50)    /* period of input event */
+#define SCOPE_EVENT_REFRESH    (100)   /* period of display event */
 
 
 #ifndef true

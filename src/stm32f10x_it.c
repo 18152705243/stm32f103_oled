@@ -24,9 +24,25 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f10x_it.h"
 #include "bsp.h"
+#include "scope.h"
 
-extern uint16_t adc_buf[1024];
-extern uint8_t adc_dma_changed_sta;
+
+uint32_t second_count = 0;
+uint16_t ms_count = 0;
+//定时器2中断服务程序	 
+void TIM2_IRQHandler(void)
+{
+    if (TIM_GetITStatus(TIM2, TIM_IT_Update))
+    {
+        Scope_UpdateHeart(1);
+        if (ms_count >= 1000) {
+            second_count++;
+            ms_count = 0;
+        }
+        TIM_ClearITPendingBit(TIM2, TIM_IT_Update); //清除中断标志位
+    }
+ 
+}
 
 #if USART1_IRQ_ALLOW != 0
 uint8_t uart1_recive_ch;

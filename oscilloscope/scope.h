@@ -4,19 +4,40 @@
 #include "scope_conf.h"
 #include "scope_gui.h"
 
+struct scope_event_s {
+    /* the follow is the state of key press, 0: released    1: pressed */
+    scope_sta_t key_up : 1;
+    scope_sta_t key_down : 1;
+    scope_sta_t key_left : 1;
+    scope_sta_t key_right : 1;
+    scope_sta_t key_shift : 1;
+    scope_sta_t key_ok : 1;
+    scope_sta_t key_pause : 1;
+    scope_sta_t key_return : 1;
+};
+
+struct scope_mode_s {
+	scope_sta_t messurement : 2;
+	scope_sta_t blocked : 1;
+    scope_sta_t trigger : 1;   /* !< trigger mode, 0: rising   1: falling */
+
+};
+
 typedef struct scope_s {
+    struct scope_mode_s mode;
     scope_uint8_t time_base;
-    scope_sta_t trig_sta;
     scope_uint16_t wave_width;  /* !< */
     scope_uint16_t trig_level;  /* !< tirgger level of wave */
     scope_wave_t wave_value_max;
     scope_wave_t wave_value_min;
     scope_uint32_t wave_fre;    /* !< wave frequence, wave_fre Hz */
+    struct scope_event_s event;
     char *time_base_buf;
     float vpp;
     float vmin;
     float duty;
 }scope_t;
+
 
 enum Scope_TimeBase {
 	TB_Min,
@@ -53,19 +74,28 @@ enum Scope_TimeBase {
 	// TB_10ns,
 };
 
+enum SCOPE_MODE {
+    SCOPE_MODE_MIN,
+    SCOPE_MODE_NORMAL = SCOPE_MODE_MIN,
+    SCOPE_MODE_AUTO,
+    SCOPE_MODE_SINGLE,
+    SCOPE_MODE_MAX = SCOPE_MODE_SINGLE
+};
 
 
+void Scope_Init(void);
 void Scope_SetTimeBase(void);
 void Scope_Start(void);
 void Scope_RefreshWave(scope_wave_t *adc_buf);
 
 void Scope_AddTimeBase(void);
 void Scope_SubTimeBase(void);
+void Scope_UpdateHeart(scope_uint8_t nms);
 
 /**
  * @brief Calculate wave width
  * @param wave_buf wave buffer
- * @return the state of calculate wave width, ture: success false: false 
+ * @return the state of calculate wave width, ture: success   false: false 
  */
 scope_sta_t Scope_GetWaveWidth(scope_wave_t *wave_buf);
 

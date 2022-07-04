@@ -36,4 +36,5 @@
 ..\output\scope.o: B:\KEIL_MDK\ARM\ARMCC\Bin\..\include\stdio.h
 ..\output\scope.o: ..\oscilloscope\scope_gui.h
 ..\output\scope.o: ..\bsp\bsp_adc.h
+..\output\scope.o: ..\bsp\bsp_gpio.h
 ..\output\scope.o: B:\KEIL_MDK\ARM\ARMCC\Bin\..\include\string.h

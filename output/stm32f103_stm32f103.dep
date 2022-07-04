@@ -1,5 +1,5 @@
 Dependencies for Project 'stm32f103', Target 'stm32f103': (DO NOT MODIFY !)
-F (..\src\main.c)(0x62B18C33)(--c99 --gnu -c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\drivers -I ..\libraries\fwlib\inc -I ..\libraries\cmsis -I ..\src -I ..\bsp -I ..\oscilloscope --diag_suppress=111-I.\RTE\_stm32f103-IB:\KEIL_MDK\Keil\STM32F1xx_DFP\2.4.0\Device\Include-IB:\KEIL_MDK\ARM\CMSIS\Include-D__UVISION_VERSION="528" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\output\main.o --omf_browse ..\output\main.crf --depend ..\output\main.d)
+F (..\src\main.c)(0x62B2C82E)(--c99 --gnu -c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\drivers -I ..\libraries\fwlib\inc -I ..\libraries\cmsis -I ..\src -I ..\bsp -I ..\oscilloscope --diag_suppress=111-I.\RTE\_stm32f103-IB:\KEIL_MDK\Keil\STM32F1xx_DFP\2.4.0\Device\Include-IB:\KEIL_MDK\ARM\CMSIS\Include-D__UVISION_VERSION="528" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\output\main.o --omf_browse ..\output\main.crf --depend ..\output\main.d)
 I (..\bsp\bsp.h)(0x6242D836)
 I (..\bsp\bsp_config.h)(0x6242BEAE)
 I (..\libraries\cmsis\stm32f10x.h)(0x6163EF1B)
@@ -36,12 +36,12 @@ I (..\bsp\bsp_timer.h)(0x625CD630)
 I (..\bsp\bsp_gpio.h)(0x62B17D3E)
 I (..\drivers\oled.h)(0x62A09C9E)
 I (B:\KEIL_MDK\ARM\ARMCC\include\stdlib.h)(0x5CEB79E2)
-I (..\oscilloscope\scope.h)(0x62B1865E)
-I (..\oscilloscope\scope_conf.h)(0x62B1880B)
-I (..\oscilloscope\scope_gui.h)(0x62B17B49)
+I (..\oscilloscope\scope.h)(0x62B91ADA)
+I (..\oscilloscope\scope_conf.h)(0x62B950DB)
+I (..\oscilloscope\scope_gui.h)(0x62B92362)
 I (..\bsp\bsp_adc.h)(0x62AE9BAD)
 I (B:\KEIL_MDK\ARM\ARMCC\include\string.h)(0x5CEB79E2)
-F (..\src\stm32f10x_it.c)(0x62B16BAB)(--c99 --gnu -c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\drivers -I ..\libraries\fwlib\inc -I ..\libraries\cmsis -I ..\src -I ..\bsp -I ..\oscilloscope --diag_suppress=111-I.\RTE\_stm32f103-IB:\KEIL_MDK\Keil\STM32F1xx_DFP\2.4.0\Device\Include-IB:\KEIL_MDK\ARM\CMSIS\Include-D__UVISION_VERSION="528" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\output\stm32f10x_it.o --omf_browse ..\output\stm32f10x_it.crf --depend ..\output\stm32f10x_it.d)
+F (..\src\stm32f10x_it.c)(0x62B1CF03)(--c99 --gnu -c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\drivers -I ..\libraries\fwlib\inc -I ..\libraries\cmsis -I ..\src -I ..\bsp -I ..\oscilloscope --diag_suppress=111-I.\RTE\_stm32f103-IB:\KEIL_MDK\Keil\STM32F1xx_DFP\2.4.0\Device\Include-IB:\KEIL_MDK\ARM\CMSIS\Include-D__UVISION_VERSION="528" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\output\stm32f10x_it.o --omf_browse ..\output\stm32f10x_it.crf --depend ..\output\stm32f10x_it.d)
 I (..\src\stm32f10x_it.h)(0x6242B77E)
 I (..\libraries\cmsis\stm32f10x.h)(0x6163EF1B)
 I (..\libraries\cmsis\core_cm3.h)(0x6163EF1B)
@@ -75,9 +75,13 @@ I (..\bsp\bsp.h)(0x6242D836)
 I (..\bsp\bsp_config.h)(0x6242BEAE)
 I (..\bsp\bsp_usart.h)(0x62465310)
 I (B:\KEIL_MDK\ARM\ARMCC\include\stdio.h)(0x5CEB79E2)
-F (..\oscilloscope\scope.c)(0x62B18B5A)(--c99 --gnu -c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\drivers -I ..\libraries\fwlib\inc -I ..\libraries\cmsis -I ..\src -I ..\bsp -I ..\oscilloscope --diag_suppress=111-I.\RTE\_stm32f103-IB:\KEIL_MDK\Keil\STM32F1xx_DFP\2.4.0\Device\Include-IB:\KEIL_MDK\ARM\CMSIS\Include-D__UVISION_VERSION="528" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\output\scope.o --omf_browse ..\output\scope.crf --depend ..\output\scope.d)
-I (..\oscilloscope\scope.h)(0x62B1865E)
-I (..\oscilloscope\scope_conf.h)(0x62B1880B)
+I (..\bsp\bsp_adc.h)(0x62AE9BAD)
+I (..\oscilloscope\scope.h)(0x62B91ADA)
+I (..\oscilloscope\scope_conf.h)(0x62B950DB)
+I (..\oscilloscope\scope_gui.h)(0x62B92362)
+F (..\oscilloscope\scope.c)(0x62B974A9)(--c99 --gnu -c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\drivers -I ..\libraries\fwlib\inc -I ..\libraries\cmsis -I ..\src -I ..\bsp -I ..\oscilloscope --diag_suppress=111-I.\RTE\_stm32f103-IB:\KEIL_MDK\Keil\STM32F1xx_DFP\2.4.0\Device\Include-IB:\KEIL_MDK\ARM\CMSIS\Include-D__UVISION_VERSION="528" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\output\scope.o --omf_browse ..\output\scope.crf --depend ..\output\scope.d)
+I (..\oscilloscope\scope.h)(0x62B91ADA)
+I (..\oscilloscope\scope_conf.h)(0x62B950DB)
 I (..\bsp\bsp.h)(0x6242D836)
 I (..\bsp\bsp_config.h)(0x6242BEAE)
 I (..\libraries\cmsis\stm32f10x.h)(0x6163EF1B)
@@ -110,12 +114,13 @@ I (..\libraries\fwlib\inc\stm32f10x_wwdg.h)(0x6163EF1B)
 I (..\libraries\fwlib\inc\misc.h)(0x6163EF1B)
 I (..\bsp\bsp_usart.h)(0x62465310)
 I (B:\KEIL_MDK\ARM\ARMCC\include\stdio.h)(0x5CEB79E2)
-I (..\oscilloscope\scope_gui.h)(0x62B17B49)
+I (..\oscilloscope\scope_gui.h)(0x62B92362)
 I (..\bsp\bsp_adc.h)(0x62AE9BAD)
+I (..\bsp\bsp_gpio.h)(0x62B17D3E)
 I (B:\KEIL_MDK\ARM\ARMCC\include\string.h)(0x5CEB79E2)
-F (..\oscilloscope\scope_gui.c)(0x62B17B3E)(--c99 --gnu -c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\drivers -I ..\libraries\fwlib\inc -I ..\libraries\cmsis -I ..\src -I ..\bsp -I ..\oscilloscope --diag_suppress=111-I.\RTE\_stm32f103-IB:\KEIL_MDK\Keil\STM32F1xx_DFP\2.4.0\Device\Include-IB:\KEIL_MDK\ARM\CMSIS\Include-D__UVISION_VERSION="528" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\output\scope_gui.o --omf_browse ..\output\scope_gui.crf --depend ..\output\scope_gui.d)
-I (..\oscilloscope\scope_gui.h)(0x62B17B49)
-I (..\oscilloscope\scope_conf.h)(0x62B1880B)
+F (..\oscilloscope\scope_gui.c)(0x62B9234C)(--c99 --gnu -c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\drivers -I ..\libraries\fwlib\inc -I ..\libraries\cmsis -I ..\src -I ..\bsp -I ..\oscilloscope --diag_suppress=111-I.\RTE\_stm32f103-IB:\KEIL_MDK\Keil\STM32F1xx_DFP\2.4.0\Device\Include-IB:\KEIL_MDK\ARM\CMSIS\Include-D__UVISION_VERSION="528" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\output\scope_gui.o --omf_browse ..\output\scope_gui.crf --depend ..\output\scope_gui.d)
+I (..\oscilloscope\scope_gui.h)(0x62B92362)
+I (..\oscilloscope\scope_conf.h)(0x62B950DB)
 I (..\bsp\bsp.h)(0x6242D836)
 I (..\bsp\bsp_config.h)(0x6242BEAE)
 I (..\libraries\cmsis\stm32f10x.h)(0x6163EF1B)
@@ -150,7 +155,7 @@ I (..\bsp\bsp_usart.h)(0x62465310)
 I (B:\KEIL_MDK\ARM\ARMCC\include\stdio.h)(0x5CEB79E2)
 I (..\drivers\oled.h)(0x62A09C9E)
 I (B:\KEIL_MDK\ARM\ARMCC\include\stdlib.h)(0x5CEB79E2)
-F (..\oscilloscope\scope_conf.h)(0x62B1880B)()
+F (..\oscilloscope\scope_conf.h)(0x62B950DB)()
 F (..\drivers\oled.c)(0x62B12D87)(--c99 --gnu -c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\drivers -I ..\libraries\fwlib\inc -I ..\libraries\cmsis -I ..\src -I ..\bsp -I ..\oscilloscope --diag_suppress=111-I.\RTE\_stm32f103-IB:\KEIL_MDK\Keil\STM32F1xx_DFP\2.4.0\Device\Include-IB:\KEIL_MDK\ARM\CMSIS\Include-D__UVISION_VERSION="528" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\output\oled.o --omf_browse ..\output\oled.crf --depend ..\output\oled.d)
 I (..\drivers\oled.h)(0x62A09C9E)
 I (..\bsp\bsp.h)(0x6242D836)
@@ -250,7 +255,7 @@ I (..\libraries\fwlib\inc\misc.h)(0x6163EF1B)
 I (B:\KEIL_MDK\ARM\ARMCC\include\stdio.h)(0x5CEB79E2)
 I (B:\KEIL_MDK\ARM\ARMCC\include\stdarg.h)(0x5CEB79E4)
 I (B:\KEIL_MDK\ARM\ARMCC\include\string.h)(0x5CEB79E2)
-F (..\bsp\bsp_timer.c)(0x6292D2AE)(--c99 --gnu -c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\drivers -I ..\libraries\fwlib\inc -I ..\libraries\cmsis -I ..\src -I ..\bsp -I ..\oscilloscope --diag_suppress=111-I.\RTE\_stm32f103-IB:\KEIL_MDK\Keil\STM32F1xx_DFP\2.4.0\Device\Include-IB:\KEIL_MDK\ARM\CMSIS\Include-D__UVISION_VERSION="528" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\output\bsp_timer.o --omf_browse ..\output\bsp_timer.crf --depend ..\output\bsp_timer.d)
+F (..\bsp\bsp_timer.c)(0x62B1985A)(--c99 --gnu -c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\drivers -I ..\libraries\fwlib\inc -I ..\libraries\cmsis -I ..\src -I ..\bsp -I ..\oscilloscope --diag_suppress=111-I.\RTE\_stm32f103-IB:\KEIL_MDK\Keil\STM32F1xx_DFP\2.4.0\Device\Include-IB:\KEIL_MDK\ARM\CMSIS\Include-D__UVISION_VERSION="528" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\output\bsp_timer.o --omf_browse ..\output\bsp_timer.crf --depend ..\output\bsp_timer.d)
 I (..\bsp\bsp_timer.h)(0x625CD630)
 I (..\bsp\bsp.h)(0x6242D836)
 I (..\bsp\bsp_config.h)(0x6242BEAE)

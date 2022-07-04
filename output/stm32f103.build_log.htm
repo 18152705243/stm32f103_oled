@@ -27,11 +27,59 @@ Project File Date:  06/09/2022
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 6 (build 750)', folder: 'B:\KEIL_MDK\ARM\ARMCC\Bin'
 Build target 'stm32f103'
+compiling stm32f10x_it.c...
 compiling main.c...
+..\src\main.c(15): warning:  #177-D: variable "key_value"  was declared but never referenced
+  	uint8_t key_value;
+..\src\main.c(16): warning:  #177-D: variable "adc_cmd_sta"  was declared but never referenced
+  	uint8_t adc_cmd_sta = 1;
+..\src\main.c(17): warning:  #177-D: variable "i"  was declared but never referenced
+  	uint16_t i;
+..\src\main.c: 3 warnings, 0 errors
+compiling scope_gui.c...
+..\oscilloscope\scope_gui.c(60): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "u8 *"
+      OLED_ShowString(x, y, buf, size, 1);
+..\oscilloscope\scope_gui.c(65): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "u8 *"
+      OLED_ShowString(x, y, buf, size, 0);
+..\oscilloscope\scope_gui.c: 2 warnings, 0 errors
+compiling scope.c...
+..\oscilloscope\scope.c(350): warning:  #177-D: variable "index"  was declared but never referenced
+      scope_uint16_t index, iduty = 0;
+..\oscilloscope\scope.c(648): warning:  #192-D: unrecognized character escape sequence
+                          Scope_DisplayDuty("100\%");
+..\oscilloscope\scope.c(652): warning:  #192-D: unrecognized character escape sequence
+                          Scope_DisplayDuty("  0\%");
+..\oscilloscope\scope.c(690): warning:  #167-D: argument of type "const unsigned char *" is incompatible with parameter of type "const char *"
+                  Scope_DisplayTrigRising();
+..\oscilloscope\scope.c(690): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "const char *"
+                  Scope_DisplayTrigRising();
+..\oscilloscope\scope.c(694): warning:  #167-D: argument of type "const unsigned char *" is incompatible with parameter of type "const char *"
+                  Scope_DisplayTrigFalling();
+..\oscilloscope\scope.c(694): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "const char *"
+                  Scope_DisplayTrigFalling();
+..\oscilloscope\scope.c(702): warning:  #167-D: argument of type "const unsigned char *" is incompatible with parameter of type "const char *"
+          Scope_DisplayBlock();
+..\oscilloscope\scope.c(704): warning:  #167-D: argument of type "const unsigned char *" is incompatible with parameter of type "const char *"
+          Scope_DisplayVoltageBase();
+..\oscilloscope\scope.c(705): warning:  #167-D: argument of type "const unsigned char *" is incompatible with parameter of type "const char *"
+          Scope_DisplayTrigBase();
+..\oscilloscope\scope.c(724): warning:  #167-D: argument of type "const unsigned char *" is incompatible with parameter of type "const char *"
+                          Scope_DisplayTrigRising();
+..\oscilloscope\scope.c(724): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "const char *"
+                          Scope_DisplayTrigRising();
+..\oscilloscope\scope.c(728): warning:  #167-D: argument of type "const unsigned char *" is incompatible with parameter of type "const char *"
+                          Scope_DisplayTrigFalling();
+..\oscilloscope\scope.c(728): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "const char *"
+                          Scope_DisplayTrigFalling();
+..\oscilloscope\scope.c(745): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "const char *"
+                          Scope_DisplayTrigRisingReverse();
+..\oscilloscope\scope.c(749): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "const char *"
+                          Scope_DisplayTrigFallingReverse();
+..\oscilloscope\scope.c: 16 warnings, 0 errors
 linking...
-Program Size: Code=18522 RO-data=7114 RW-data=60 ZI-data=10828  
+Program Size: Code=20506 RO-data=7122 RW-data=76 ZI-data=10836  
 FromELF: creating hex file...
-"..\output\stm32f103.axf" - 0 Error(s), 0 Warning(s).
+"..\output\stm32f103.axf" - 0 Error(s), 21 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -45,7 +93,7 @@ Package Vendor: Keil
   B:\KEIL_MDK\Keil\STM32F1xx_DFP\2.4.0\Device\Include
 
 <h2>Collection of Component Files used:</h2>
-Build Time Elapsed:  00:00:00
+Build Time Elapsed:  00:00:02
 </pre>
 </body>
 </html>

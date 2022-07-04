@@ -24,6 +24,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f10x_it.h"
 #include "bsp.h"
+#include "bsp_adc.h"
 #include "scope.h"
 
 

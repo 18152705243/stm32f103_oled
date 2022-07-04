@@ -1,24 +1,75 @@
 #include "scope.h"
 #include "bsp.h"
 #include "bsp_adc.h"
+#include "bsp_gpio.h"
 #include <stdio.h>
 #include <string.h>
+
+
+
+#define Scope_DisplayFre(buf)       {Scope_DrawPicReverse(SCOPE_START_X, SCOPE_START_Y, 8, 8, bmp_frequence); \
+                                    Scope_ShowStr(SCOPE_START_X + 8, SCOPE_START_Y, buf, SCOPE_FONT_SIZE, SCOPE_COLOR_WHITE);}
+#define Scope_DisplayDuty(buf)      {Scope_DrawPicReverse(SCOPE_START_X + (6) * SCOPE_FONT_HOR + 8 * 2, SCOPE_START_Y, 8, 8, bmp_duty); \
+                                    Scope_ShowStr(SCOPE_START_X + (6) * SCOPE_FONT_HOR + 8 * 3, SCOPE_START_Y, buf, SCOPE_FONT_SIZE, SCOPE_COLOR_WHITE);}
+#define Scope_DisplayProgressBar(percent)   {Scope_DrawPic(SCOPE_START_X + (11) * SCOPE_FONT_HOR + 8 * 3, SCOPE_START_Y, 16, 8, bmp_progress_rect); \
+                                            Scope_Fill(SCOPE_START_X + (11) * SCOPE_FONT_HOR + 8 * 3 + 1, SCOPE_START_Y + 1, SCOPE_START_X + (11) * SCOPE_FONT_HOR + 8 * 3 + 14, SCOPE_START_Y + 6, SCOPE_COLOR_BLACK); \
+                                            Scope_DrawLine(SCOPE_START_X + (11) * SCOPE_FONT_HOR + 8 * 3 + (percent / 100.0) * 14, SCOPE_START_Y + 1, SCOPE_START_X + (11) * SCOPE_FONT_HOR + 8 * 3 + (percent / 100.0) * 14, SCOPE_START_Y + 7, SCOPE_COLOR_WHITE);}
+
+
+#define Scope_DisplayTimeBase()     Scope_ShowStrReverse(SCOPE_WIN_START_X, SCOPE_WIN_END_Y + 1, hscope.time_base_buf, SCOPE_FONT_SIZE, SCOPE_COLOR_WHITE)
+
+#define Scope_DisplayMode()         {if (hscope.mode.messurement == SCOPE_MODE_NORMAL) \
+                                    {Scope_ShowStr(SCOPE_WIN_START_X + 5 * SCOPE_FONT_HOR + 7 + 2, SCOPE_WIN_END_Y + 1, "N", SCOPE_FONT_SIZE, SCOPE_COLOR_WHITE);} \
+                                    else if (hscope.mode.messurement == SCOPE_MODE_AUTO) \
+                                    {Scope_ShowStr(SCOPE_WIN_START_X + 5 * SCOPE_FONT_HOR + 7 + 2, SCOPE_WIN_END_Y + 1, "A", SCOPE_FONT_SIZE, SCOPE_COLOR_WHITE);} \
+                                    else if (hscope.mode.messurement == SCOPE_MODE_SINGLE) \
+                                    {Scope_ShowStr(SCOPE_WIN_START_X + 5 * SCOPE_FONT_HOR + 7 + 2, SCOPE_WIN_END_Y + 1, "S", SCOPE_FONT_SIZE, SCOPE_COLOR_WHITE);}}
+#define Scope_DisplayModeReverse()  {if (hscope.mode.messurement == SCOPE_MODE_NORMAL) \
+                                    {Scope_ShowStrReverse(SCOPE_WIN_START_X + 5 * SCOPE_FONT_HOR + 7 + 2, SCOPE_WIN_END_Y + 1, "N", SCOPE_FONT_SIZE, SCOPE_COLOR_WHITE);} \
+                                    else if (hscope.mode.messurement == SCOPE_MODE_AUTO) \
+                                    {Scope_ShowStrReverse(SCOPE_WIN_START_X + 5 * SCOPE_FONT_HOR + 7 + 2, SCOPE_WIN_END_Y + 1, "A", SCOPE_FONT_SIZE, SCOPE_COLOR_WHITE);} \
+                                    else if (hscope.mode.messurement == SCOPE_MODE_SINGLE) \
+                                    {Scope_ShowStrReverse(SCOPE_WIN_START_X + 5 * SCOPE_FONT_HOR + 7 + 2, SCOPE_WIN_END_Y + 1, "S", SCOPE_FONT_SIZE, SCOPE_COLOR_WHITE);}}
+
+#define Scope_DisplayBlock()        {if (hscope.mode.blocked) \
+                                    {Scope_ShowStrReverse(SCOPE_WIN_START_X + 6 * SCOPE_FONT_HOR + 7 + 4, SCOPE_WIN_END_Y + 1, "S", SCOPE_FONT_SIZE, SCOPE_COLOR_WHITE);} \
+                                    else \
+                                    {Scope_ShowStrReverse(SCOPE_WIN_START_X + 6 * SCOPE_FONT_HOR + 7 + 4, SCOPE_WIN_END_Y + 1, "R", SCOPE_FONT_SIZE, SCOPE_COLOR_WHITE);} \
+                                    Scope_DrawPicReverse(SCOPE_WIN_START_X + 7 * SCOPE_FONT_HOR + 7 + 4, SCOPE_WIN_END_Y + 1, 1, 8, bmp_fill);}
+
+#define Scope_DisplayVoltage(buf)      {Scope_ShowStr((SCOPE_WIDTH - 1) - 12 * SCOPE_FONT_HOR, SCOPE_WIN_END_Y + 1, buf, SCOPE_FONT_SIZE, SCOPE_COLOR_WHITE);}
+
+#define Scope_DisplayTrigRising()   {Scope_DrawPicReverse(SCOPE_WIN_START_X + 7 * SCOPE_FONT_HOR + 7 + 4, SCOPE_WIN_END_Y + 1, 1, 8, bmp_fill); \
+                                    Scope_DrawPicReverse(SCOPE_WIN_START_X + 5 * SCOPE_FONT_HOR + 1, SCOPE_WIN_END_Y + 1, 7, 8, (u8 *)bmp_edge_rising);}
+#define Scope_DisplayTrigFalling()  {Scope_DrawPicReverse(SCOPE_WIN_START_X + 7 * SCOPE_FONT_HOR + 7 + 4, SCOPE_WIN_END_Y + 1, 1, 8, bmp_fill); \
+                                    Scope_DrawPicReverse(SCOPE_WIN_START_X + 5 * SCOPE_FONT_HOR + 1, SCOPE_WIN_END_Y + 1, 7, 8, (u8 *)bmp_edge_falling);}
+#define Scope_DisplayTrigRisingReverse()    {Scope_DrawPic(SCOPE_WIN_START_X + 5 * SCOPE_FONT_HOR + 1, SCOPE_WIN_END_Y + 1, 7, 8, (u8 *)bmp_edge_rising);}
+#define Scope_DisplayTrigFallingReverse()   {Scope_DrawPic(SCOPE_WIN_START_X + 5 * SCOPE_FONT_HOR + 1, SCOPE_WIN_END_Y + 1, 7, 8, (u8 *)bmp_edge_falling);}
+
+#define Scope_DisplayVoltageBase()  {Scope_DrawPic(SCOPE_WIN_START_X + 1, SCOPE_WIN_WAVE_END_Y - 3, 3, 8, bmp_voltage_base);}
+#define Scope_DisplayTrigBase()     {Scope_DrawPic(SCOPE_WIN_END_X - 3, SCOPE_WIN_WAVE_END_Y - ((SCOPE_WIN_WAVE_END_Y - SCOPE_WIN_WAVE_START_Y + 1) * ((float)hscope.trig_level / SCOPE_WAVE_VALUE_MAX)), 3, 8, bmp_trig_base);}
 
 scope_t hscope = {0};
 
 static scope_uint16_t sample_gap_per_point; // 屏幕上每点对应采样点的间隔数（采样点的间隔时间小于等于屏幕上的时间间隔，所以要进行缩放）
 static scope_uint16_t second_period_start_index;    // 第二个周期在缓存中的开始位置
 static scope_uint32_t scope_heart_counter;
-
+static scope_sta_t scope_blinked_sta;
 
 
 void Scope_ClearHeart(void);
 scope_uint32_t Scope_GetHeart(void);
+void Scope_HandleEvent(scope_wave_t *wave_buf);
+void Scope_HandleInput(void);
+void Scope_ReadInput(void);
 
 
+/**
+ * @brief Initial the parament of oscilloscope 
+ */
 void Scope_Init(void)
 {
-    hscope.time_base = TB_1ms;
+    hscope.time_base = TB_0ms1;
     hscope.wave_width = 0;
     hscope.trig_level = 1024; // 1/4 of max messure range
 	hscope.duty = 0.0;
@@ -26,6 +77,7 @@ void Scope_Init(void)
 
     hscope.mode.messurement = 0;
     hscope.mode.blocked = false;
+    hscope.mode.setting = false;
 
 	Scope_SetTimeBase();
 }
@@ -155,32 +207,64 @@ void Scope_SetTimeBase(void)
 void Scope_DrawNet(void)
 {
     scope_uint16_t i, j;
-    static scope_uint16_t lines_x_per_gap = (SCOPE_END_X - SCOPE_START_X) / 5; // x：列每两格之间的像素
-    static scope_uint16_t lines_y_per_gap = (SCOPE_END_Y - SCOPE_START_Y) / 5; // y：行每两格之间的像素
+    static scope_uint16_t lines_x_per_gap = (SCOPE_WIN_WAVE_END_X - SCOPE_WIN_WAVE_START_X) / 5; // x：列每两格之间的像素
+    static scope_uint16_t lines_y_per_gap = (SCOPE_WIN_WAVE_END_Y - SCOPE_WIN_WAVE_START_Y + 1) / 5; // y：行每两格之间的像素
+
+    Scope_DrawLine(SCOPE_WIN_START_X, SCOPE_WIN_START_Y, SCOPE_WIN_START_X, SCOPE_WIN_END_Y, SCOPE_COLOR_WHITE);
+    Scope_DrawLine(SCOPE_WIN_END_X, SCOPE_WIN_START_Y, SCOPE_WIN_END_X, SCOPE_WIN_END_Y, SCOPE_COLOR_WHITE);
+    
+    Scope_DrawLine(SCOPE_WIN_START_X, SCOPE_WIN_START_Y, 
+                        SCOPE_WIN_START_X + 3, SCOPE_WIN_START_Y, SCOPE_COLOR_WHITE);
+    Scope_DrawLine(SCOPE_WIN_END_X - 3, SCOPE_WIN_START_Y, 
+                        SCOPE_WIN_END_X, SCOPE_WIN_START_Y, SCOPE_COLOR_WHITE);
+    Scope_DrawLine(SCOPE_WIN_END_X - 6, SCOPE_WIN_WAVE_START_Y, 
+                        SCOPE_WIN_END_X + 3, SCOPE_WIN_WAVE_START_Y, SCOPE_COLOR_WHITE);
+    Scope_DrawLine(SCOPE_WIN_START_X, SCOPE_WIN_END_Y, 
+                        SCOPE_WIN_END_X, SCOPE_WIN_END_Y, SCOPE_COLOR_WHITE);
 
     for (i = 1; i <= 4; i++)
     {
-        for (j = 1; j <= 4; j++)
+        for (j = 0; j < 6; j++)
         {
-            Scope_DrawPoint(SCOPE_START_X + j * lines_x_per_gap,
-                            SCOPE_START_Y + i * lines_y_per_gap, SCOPE_COLOR_WHITE);
+            Scope_DrawPoint(SCOPE_WIN_WAVE_START_X + i * lines_x_per_gap,
+                            SCOPE_WIN_WAVE_START_Y + j * lines_y_per_gap, SCOPE_COLOR_WHITE);
+
         }
+        Scope_DrawLine(SCOPE_WIN_START_X + i * lines_x_per_gap - 2, SCOPE_WIN_START_Y, 
+                        SCOPE_WIN_START_X + i * lines_x_per_gap + 3, SCOPE_WIN_START_Y, 
+                        SCOPE_COLOR_WHITE);
+
+        Scope_DrawLine(SCOPE_WIN_START_X + i * lines_x_per_gap, SCOPE_WIN_START_Y, 
+                        SCOPE_WIN_START_X + i * lines_x_per_gap, SCOPE_WIN_START_Y + 3, 
+                        SCOPE_COLOR_WHITE);
+        
+        Scope_DrawLine(SCOPE_WIN_START_X + i * lines_x_per_gap, SCOPE_WIN_END_Y - 2, 
+                        SCOPE_WIN_START_X + i * lines_x_per_gap, SCOPE_WIN_END_Y, 
+                        SCOPE_COLOR_WHITE);
     }
 }
 
-void Scope_Start()
+scope_uint16_t Scope_Value2Net(float data_percent)
 {
-    scope_uint16_t i;
-
-    Scope_DrawRect(SCOPE_START_X, SCOPE_START_Y, SCOPE_END_X, SCOPE_END_Y, SCOPE_COLOR_WHITE);
-    Scope_DrawNet();
-
-    // Scope_Fill(SCOPE_END_X + 2, SCOPE_START_Y, SCOPE_WIDTH - 1, SCOPE_END_Y, 1);
-    // Scope_Fill(SCOPE_END_X + 2, SCOPE_START_Y + 12*1, SCOPE_WIDTH - 1, SCOPE_START_Y + 12*2, 0);
-    // Scope_Fill(SCOPE_END_X + 2, SCOPE_START_Y + 12*3, SCOPE_WIDTH - 1, SCOPE_START_Y + 12*4, 0);
+	scope_uint16_t res;
+    if (data_percent >= 1.0)
+        data_percent = 1.0;
+    else if (data_percent < 0)
+        data_percent = 0.0;
+	res = (SCOPE_WIN_WAVE_END_Y - SCOPE_WIN_WAVE_START_Y + 1) * data_percent;
+	res = SCOPE_WIN_WAVE_END_Y - res;
+    return res;
 }
 
-void Scope_RefreshWave(scope_wave_t *wave_buf)
+void Scope_Start(void)
+{
+    
+    Scope_DrawNet();
+
+}
+
+
+void Scope_RefreshWaveAuto(scope_wave_t *wave_buf)
 {
     scope_uint16_t i, y0, y1;
     scope_uint16_t wave_buf_index_offset ;
@@ -194,22 +278,44 @@ void Scope_RefreshWave(scope_wave_t *wave_buf)
 		wave_buf_index_offset = 0;
 	}
 
-    Scope_Fill(SCOPE_START_X + 1, SCOPE_START_Y + 1,
-               SCOPE_START_X + SCOPE_WAVE_POINT_NUM - 1, SCOPE_END_Y - 1,
+    Scope_Fill(SCOPE_WIN_START_X + 1, SCOPE_WIN_START_Y + 1,
+               SCOPE_WIN_START_X + SCOPE_WAVE_POINT_NUM - 1, SCOPE_WIN_END_Y - 1,
                SCOPE_COLOR_BLACK);
 
     for (i = 0; i < SCOPE_WAVE_POINT_NUM; i++)
     {
-        y0 = (wave_buf[wave_buf_index_offset + i * sample_gap_per_point] / (float)(SCOPE_WAVE_VALUE_MAX + 1)) * 40;
-        y1 = (wave_buf[wave_buf_index_offset + (i + 1) * sample_gap_per_point] / (float)(SCOPE_WAVE_VALUE_MAX + 1)) * 40;
+        y0 = Scope_Value2Net((float)wave_buf[wave_buf_index_offset + i * sample_gap_per_point] / (SCOPE_WAVE_VALUE_MAX + 1));
+        y1 = Scope_Value2Net((float)wave_buf[wave_buf_index_offset + (i + 1) * sample_gap_per_point] / (SCOPE_WAVE_VALUE_MAX + 1));
 
-        Scope_DrawLine(SCOPE_START_X + i, SCOPE_END_Y - y0 - 10,
-        				SCOPE_START_X + i + 1, SCOPE_END_Y - y1 - 10,
+        Scope_DrawLine(SCOPE_WIN_WAVE_START_X + i, y0,
+        				SCOPE_WIN_WAVE_START_X + i + 1, y1,
         				SCOPE_COLOR_WHITE);
-        // Scope_DrawPoint(SCOPE_START_X + i, SCOPE_END_Y - 10 - y0, SCOPE_COLOR_WHITE);
+        // Scope_DrawPoint(SCOPE_WIN_START_X + i, SCOPE_WIN_END_Y - 10 - y0, SCOPE_COLOR_WHITE);
     }
     Scope_DrawNet();
 }
+
+void Scope_RefreshWave(scope_wave_t *wave_buf)
+{
+    scope_uint16_t i, y0, y1;
+	
+    Scope_Fill(SCOPE_WIN_START_X + 1, SCOPE_WIN_START_Y + 1,
+               SCOPE_WIN_START_X + SCOPE_WAVE_POINT_NUM - 1, SCOPE_WIN_END_Y - 1,
+               SCOPE_COLOR_BLACK);
+
+    for (i = 0; i < SCOPE_WAVE_POINT_NUM; i++)
+    {
+        y0 = Scope_Value2Net((float)wave_buf[i * sample_gap_per_point] / (SCOPE_WAVE_VALUE_MAX + 1));
+        y1 = Scope_Value2Net((float)wave_buf[(i + 1) * sample_gap_per_point] / (SCOPE_WAVE_VALUE_MAX + 1));
+		
+        Scope_DrawLine(SCOPE_WIN_WAVE_START_X + i, y0,
+        				SCOPE_WIN_WAVE_START_X + i + 1, y1,
+        				SCOPE_COLOR_WHITE);
+        // Scope_DrawPoint(SCOPE_WIN_START_X + i, SCOPE_WIN_END_Y - 10 - y0, SCOPE_COLOR_WHITE);
+    }
+    Scope_DrawNet();
+}
+
 
 /**
  * @brief Calculate wave width
@@ -459,133 +565,307 @@ void Scope_Auto(scope_wave_t *wave_buf)
 
 void Scope_Task(scope_wave_t *wave_buf)
 {
-    static char buf[12];
-
-    /* handler frequence */
-    Scope_ShowStr(SCOPE_END_X + 1, SCOPE_START_Y, "     ", SCOPE_FONT_SIZE, SCOPE_COLOR_WHITE);
-    Scope_ShowStr(SCOPE_END_X + 5, SCOPE_START_Y + SCOPE_FONT_SIZE, "    ", SCOPE_FONT_SIZE, SCOPE_COLOR_WHITE);
-
-    Scope_GetWaveVoltage(wave_buf);
-
-    if (Scope_GetWaveFre(wave_buf))
-    {
-        sprintf(buf, " %2d%%", (int)(hscope.duty * 100));
-        Scope_ShowStr(SCOPE_END_X + 3, SCOPE_START_Y + SCOPE_FONT_SIZE * 3, buf, SCOPE_FONT_SIZE, SCOPE_COLOR_WHITE);
-
-        if (hscope.wave_fre / 1000 > 0)
-        {
-            if (hscope.wave_fre / 100000 > 0)
-                sprintf(buf, "%3d", hscope.wave_fre / 1000);
-            else
-                sprintf(buf, "%.1f", hscope.wave_fre / 1000.0);
-            Scope_ShowStr(SCOPE_END_X + 5, SCOPE_START_Y + SCOPE_FONT_SIZE, "KHz", SCOPE_FONT_SIZE, SCOPE_COLOR_WHITE);
-        }
-        else
-        {
-            sprintf(buf, "%3d", hscope.wave_fre);
-            Scope_ShowStr(SCOPE_END_X + 5, SCOPE_START_Y + SCOPE_FONT_SIZE, " Hz", SCOPE_FONT_SIZE, SCOPE_COLOR_WHITE);
-        }
-    }
-    else
-    {
-        sprintf(buf, " ---");
-        Scope_ShowStr(SCOPE_END_X + 5, SCOPE_START_Y + SCOPE_FONT_SIZE, " Hz", SCOPE_FONT_SIZE, SCOPE_COLOR_WHITE);
-
-        if (hscope.wave_value_max >= hscope.trig_level)
-        {
-            Scope_ShowStr(SCOPE_END_X + 3, SCOPE_START_Y + SCOPE_FONT_SIZE * 3, "100\%", SCOPE_FONT_SIZE, SCOPE_COLOR_WHITE);
-        }
-        else
-        {
-            Scope_ShowStr(SCOPE_END_X + 3, SCOPE_START_Y + SCOPE_FONT_SIZE * 3, "  0\%", SCOPE_FONT_SIZE, SCOPE_COLOR_WHITE);
-        }
-    }
-    /* display frequence */
-    Scope_ShowStr(SCOPE_END_X + 1 + ((4 - strlen(buf)) * SCOPE_FONT_SIZE), SCOPE_START_Y, buf, SCOPE_FONT_SIZE, SCOPE_COLOR_WHITE);
-
-	/* display wave */
-    Scope_RefreshWave(wave_buf);
-	
-    /* display timebase */
-    Scope_ShowStrReverse(SCOPE_START_X, SCOPE_END_Y + 1, hscope.time_base_buf, SCOPE_FONT_SIZE, SCOPE_COLOR_WHITE);
-
-    /* display trigger edge */
-    Scope_DrawPicReverse(SCOPE_START_X + 5 * SCOPE_FONT_HOR + 1, SCOPE_END_Y + 1, 7, 8, (u8 *)bmp_edge_rising);
-
-    /* display mode */
-    Scope_ShowStr(SCOPE_START_X + 5 * SCOPE_FONT_HOR + 7 + 2, SCOPE_END_Y + 1, "A", SCOPE_FONT_SIZE, SCOPE_COLOR_WHITE);
-
-    
-    /* display wave blocked sta */
-    if (hscope.mode.blocked)
-    {
-        Scope_ShowStrReverse(SCOPE_START_X + 6 * SCOPE_FONT_HOR + 7 + 4, SCOPE_END_Y + 1, "S", SCOPE_FONT_SIZE, SCOPE_COLOR_WHITE);
-    }
-    else
-    {
-        Scope_ShowStrReverse(SCOPE_START_X + 6 * SCOPE_FONT_HOR + 7 + 4, SCOPE_END_Y + 1, "R", SCOPE_FONT_SIZE, SCOPE_COLOR_WHITE);
-    }
-    Scope_DrawPicReverse(SCOPE_START_X + 7 * SCOPE_FONT_HOR + 7 + 4, SCOPE_END_Y + 1, 1, 8, bmp_fill);
-
-    /* display voltage */
-    sprintf(buf, "%.2f-%.2fv", hscope.vmin, hscope.vpp);
-    Scope_ShowStr((SCOPE_WIDTH - 1) - strlen(buf) * SCOPE_FONT_HOR, SCOPE_END_Y + 1, buf, SCOPE_FONT_SIZE, SCOPE_COLOR_WHITE);
-
-    Scope_DrawPic(SCOPE_START_X + 1, 64 / 2, 3, 8, bmp_voltage_base);
-    Scope_DrawPic(SCOPE_END_X - 3, 64 / 2, 3, 8, bmp_trig_base);
-
-    Scope_Refresh();
+    Scope_HandleEvent(wave_buf);
 }
 
 
-void Scope_HandleEvent()
+void Scope_HandleEvent(scope_wave_t *wave_buf)
 {
-
+    static char buf[16];
+	static scope_uint32_t heart;
+	
+	heart = Scope_GetHeart();
     /* handle event */
-    if ((Scope_GetHeart() % SCOPE_EVENT_INPUT) == 0)
+	if (SCOPE_EVENT_READY(heart, SCOPE_EVENT_INPUT))
     {
         Scope_HandleInput();
     }
+	
+    /* handle adc change */
+	if (SCOPE_EVENT_READY(heart, SCOPE_EVENT_MESSURE))
+	{
+        /* running in normal mode */
+        if (hscope.mode.messurement == SCOPE_MODE_NORMAL)
+        {
+            if (hscope.mode.blocked)
+            {
+                ADC_DMAStopTransmit();
+            }
+            else
+            {
+                if (ADC_GetTransmitedSta())
+                {
+                    ADC_ResetTransmitedSta();
+                    ADC_DMAStartTransmit();     
+                }
+            }
+        }
+        /* running in auto mde */
+        else if (hscope.mode.messurement == SCOPE_MODE_AUTO)
+        {
+            if (hscope.mode.blocked)
+            {
+                ADC_DMAStopTransmit();
+            }
+            else
+            {
+                if (ADC_GetTransmitedSta())
+                {
+                    ADC_ResetTransmitedSta();
+                    ADC_DMAStartTransmit();     
+                }
+            }
+        }
+        else if (hscope.mode.messurement == SCOPE_MODE_SINGLE)
+        {
+
+        }
+	}
 
     /* handle display */
-    if ((Scope_GetHeart() % SCOPE_EVENT_REFRESH) == 0)
+    if (SCOPE_EVENT_READY(heart, SCOPE_EVENT_REFRESH))
     {
+        if (hscope.mode.messurement == SCOPE_MODE_NORMAL || hscope.mode.messurement == SCOPE_MODE_AUTO)
+        {
+            if (hscope.mode.messurement == SCOPE_MODE_AUTO)
+            {
+                Scope_Auto(wave_buf);
+            }
+            if (ADC_GetTransmitedSta())
+            {
+                Scope_GetWaveVoltage(wave_buf);
+
+                /* handler frequence */
+                if (Scope_GetWaveFre(wave_buf))
+                {
+                    /* display duty */
+                    sprintf(buf, " %2d%%", (int)(hscope.duty * 100));
+                    Scope_DisplayDuty(buf);
+
+                    if (hscope.wave_fre / 1000 > 0)
+                    {
+                        sprintf(buf, "%3dKHz", hscope.wave_fre / 1000);
+                    }
+                    else
+                    {
+                        sprintf(buf, "%3d Hz", hscope.wave_fre);
+                    }
+                }
+                else
+                {
+                    sprintf(buf, "--- Hz");
+
+                    if (hscope.wave_value_max >= hscope.trig_level)
+                    {
+                        Scope_DisplayDuty("100\%");
+                    }
+                    else
+                    {
+                        Scope_DisplayDuty("  0\%");
+                    }
+                }
+
+                /* display frequence */
+                Scope_DisplayFre(buf);
+            }   // ! end of if (ADC_GetTransmitedSta())
+
+            /* display voltage */
+            sprintf(buf, "%5.2f-%5.2fv", hscope.vmin, hscope.vpp);
+            
+            Scope_DisplayVoltage(buf);
+
+            /* display wave */
+            if (hscope.mode.messurement == SCOPE_MODE_NORMAL)
+            {
+                Scope_RefreshWave(wave_buf);
+            }
+            else
+            {
+                Scope_RefreshWaveAuto(wave_buf);
+            }
+            
+        }
+        else if (hscope.mode.messurement == SCOPE_MODE_SINGLE)
+        {
+
+
+        }
+
+        /* display timebase */
+        Scope_DisplayTimeBase();
+
+        if (!hscope.mode.setting)
+        {
+            /* display trigger edge */
+            if (hscope.mode.trigger == 0)
+            {
+                Scope_DisplayTrigRising();
+            }
+            else
+            {
+                Scope_DisplayTrigFalling();
+            }
+
+            /* display mode */
+            Scope_DisplayMode();
+        }
         
+        /* display wave blocked sta */
+        Scope_DisplayBlock();
+
+        Scope_DisplayVoltageBase();
+        Scope_DisplayTrigBase();
+
+        
+        Scope_DisplayProgressBar(30);
+
+        Scope_Refresh();
+    }
+    
+    if (SCOPE_EVENT_READY(heart, SCOPE_EVENT_BLINK))
+    {
+        if (hscope.mode.setting)
+        {
+            if (!scope_blinked_sta)
+            {
+                switch (hscope.setting_type)
+                {
+                case SCOPE_SETTING_MODE:
+                    Scope_DisplayMode();
+                    break;
+                case SCOPE_SETTING_TRIG:
+                    if (hscope.mode.trigger == 0)
+                    {
+                        Scope_DisplayTrigRising();
+                    }
+                    else
+                    {
+                        Scope_DisplayTrigFalling();
+                    }
+                    break;
+                default:
+                    break;
+                }
+            }
+            else
+            {
+                switch (hscope.setting_type)
+                {
+                case SCOPE_SETTING_MODE:
+                    Scope_DisplayModeReverse();
+                    break;
+                case SCOPE_SETTING_TRIG:
+                    if (hscope.mode.trigger == 0)
+                    {
+                        Scope_DisplayTrigRisingReverse();
+                    }
+                    else
+                    {
+                        Scope_DisplayTrigFallingReverse();
+                    }
+                    break;
+                default:
+                    break;
+                }
+            }
+            scope_blinked_sta = !scope_blinked_sta;
+			Scope_Refresh();
+        }
     }
 }
 
 void Scope_HandleInput(void)
 {
-    if (hscope.mode.messurement == SCOPE_MODE_NORMAL)
+	Scope_ReadInput();
+
+    if (hscope.event.key_set)
     {
-        /* pause key pressed */
-        if (hscope.event.key_pause)
-        {
-            hscope.mode.blocked = !hscope.mode.blocked;
-
-            hscope.event.key_pause = false;
-        }
-
-        if (hscope.event.key_up)
-        {
-            Scope_AddTimeBase();
-
-            hscope.event.key_up = false;
-        }
-
-        if (hscope.event.key_down)
-        {
-            Scope_SubTimeBase();
-
-            hscope.event.key_down = false;
-        }
-
+        hscope.mode.setting = !hscope.mode.setting;
+        hscope.event.key_set = 0;
     }
-    else if (hscope.mode.messurement == SCOPE_MODE_AUTO)
+
+    /* setting mode */
+    if (hscope.mode.setting)
     {
+        /* shift setting type */
+        if (hscope.event.key_left)
+        {
+            if (hscope.setting_type-- <= SCOPE_SETTING_MIN)
+                hscope.setting_type = SCOPE_SETTING_MAX;
+			hscope.event.key_left = 0;
+        }
+        else if (hscope.event.key_right)
+        {
+            if (hscope.setting_type++ >= SCOPE_SETTING_MAX)
+                hscope.setting_type = SCOPE_SETTING_MIN;
+			hscope.event.key_right = 0;
+        }
+
+        /* set messurement mode, eg: normal,auto or single */
+        if (hscope.setting_type == SCOPE_SETTING_MODE)
+        {
+            if (hscope.event.key_up)
+            {
+                if (hscope.mode.messurement++ >= SCOPE_MODE_MAX)
+                    hscope.mode.messurement = SCOPE_MODE_MAX;
+                hscope.event.key_up = 0;
+            }
+            else if (hscope.event.key_down)
+            {
+                if (hscope.mode.messurement-- <= SCOPE_MODE_MIN)
+                    hscope.mode.messurement = SCOPE_MODE_MIN;
+                hscope.event.key_down = 0;
+            }
+        }
+        /* set trigger mode, eg: rising trigger or falling trigger */
+        else if (hscope.setting_type == SCOPE_SETTING_TRIG)
+        {
+            if (hscope.event.key_up)
+            {
+                hscope.mode.trigger = !hscope.mode.trigger;
+                hscope.event.key_up = 0;
+            }
+            else if (hscope.event.key_down)
+            {
+                hscope.mode.trigger = !hscope.mode.trigger;
+                hscope.event.key_down = 0;
+            }
+        }
     }
-    else if (hscope.mode.messurement == SCOPE_MODE_SINGLE)
+    /* not setting mode */
+    else
     {
+        /* running in the normal mode */
+        if (hscope.mode.messurement == SCOPE_MODE_NORMAL)
+        {
+            /* pause key pressed */
+            if (hscope.event.key_mid_u.key_pause)
+            {
+                hscope.mode.blocked = !hscope.mode.blocked;
+                hscope.event.key_mid_u.key_pause = 0;
+            }
+
+            if (hscope.event.key_up)
+            {
+                Scope_AddTimeBase();
+                hscope.event.key_up = 0;
+            }
+
+            if (hscope.event.key_down)
+            {
+                Scope_SubTimeBase();
+                hscope.event.key_down = 0;
+            }
+
+        }
+        /* runing in the auto mode */
+        else if (hscope.mode.messurement == SCOPE_MODE_AUTO)
+        {
+        }
+        /* runing in the single mode */
+        else if (hscope.mode.messurement == SCOPE_MODE_SINGLE)
+        {
+        }
     }
 }
 
@@ -603,4 +883,23 @@ void Scope_ClearHeart(void)
 scope_uint32_t Scope_GetHeart(void)
 {
     return scope_heart_counter;
+}
+
+
+void Scope_ReadInput(void)
+{
+    scope_uint8_t key_value;
+    key_value = Key_Scan(0);
+    if (key_value == KEY_UP_PRESS)
+        hscope.event.key_up = 1;
+    else if (key_value == KEY_DOWN_PRESS)
+        hscope.event.key_down = 1;
+    else if (key_value == KEY_MID_PRESS)
+        hscope.event.key_mid_u.key_pause = 1;
+    else if (key_value == KEY_SET_PRESS)
+        hscope.event.key_set = 1;
+    else if (key_value == KEY_LEFT_PRESS)
+        hscope.event.key_left = 1;
+    else if (key_value == KEY_RIGHT_PRESS)
+        hscope.event.key_right = 1;
 }

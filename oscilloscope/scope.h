@@ -10,17 +10,27 @@ struct scope_event_s {
     scope_sta_t key_down : 1;
     scope_sta_t key_left : 1;
     scope_sta_t key_right : 1;
-    scope_sta_t key_shift : 1;
-    scope_sta_t key_ok : 1;
-    scope_sta_t key_pause : 1;
-    scope_sta_t key_return : 1;
+    scope_sta_t key_set : 1;
+    union
+    {
+        scope_sta_t key_ok : 1;
+        scope_sta_t key_pause : 1;
+    }key_mid_u;
+    
+    // union
+    // {
+    //     scope_sta_t key_ok : 1;
+    // }key_reset_u;
+    
+    // scope_sta_t key_shift : 1;
+    // scope_sta_t key_return : 1;
 };
 
 struct scope_mode_s {
 	scope_sta_t messurement : 2;
 	scope_sta_t blocked : 1;
     scope_sta_t trigger : 1;   /* !< trigger mode, 0: rising   1: falling */
-
+    scope_sta_t setting : 1;        /* !< setting mode, 0: not setting  1: setting */
 };
 
 typedef struct scope_s {
@@ -32,6 +42,7 @@ typedef struct scope_s {
     scope_wave_t wave_value_min;
     scope_uint32_t wave_fre;    /* !< wave frequence, wave_fre Hz */
     struct scope_event_s event;
+    scope_uint8_t setting_type;
     char *time_base_buf;
     float vpp;
     float vmin;
@@ -81,6 +92,17 @@ enum SCOPE_MODE {
     SCOPE_MODE_SINGLE,
     SCOPE_MODE_MAX = SCOPE_MODE_SINGLE
 };
+
+
+enum SCOPE_SETTING {
+    SCOPE_SETTING_MIN,
+    SCOPE_SETTING_MODE = SCOPE_SETTING_MIN,
+    SCOPE_SETTING_TRIG,
+    SCOPE_SETTING_MAX = SCOPE_SETTING_TRIG
+};
+
+
+#define SCOPE_EVENT_READY(event, time)	((event % time) == 0 ? 1 : 0)
 
 
 void Scope_Init(void);

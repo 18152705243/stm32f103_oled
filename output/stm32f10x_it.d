@@ -33,3 +33,7 @@
 ..\output\stm32f10x_it.o: ..\bsp\bsp_config.h
 ..\output\stm32f10x_it.o: ..\bsp\bsp_usart.h
 ..\output\stm32f10x_it.o: B:\KEIL_MDK\ARM\ARMCC\Bin\..\include\stdio.h
+..\output\stm32f10x_it.o: ..\bsp\bsp_adc.h
+..\output\stm32f10x_it.o: ..\oscilloscope\scope.h
+..\output\stm32f10x_it.o: ..\oscilloscope\scope_conf.h
+..\output\stm32f10x_it.o: ..\oscilloscope\scope_gui.h
